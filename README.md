@@ -1,5 +1,5 @@
 # CS 104 Student Repository
 
-- **Name**: Tommy Trojan
-- **USC ID**: 1234567890
-- **Email**: ttrojan@usc.edu
+- **Name**: Jonathan Esquibel
+- **USC ID**: 9031584054
+- **Email**: jesquibe@usc.edu
