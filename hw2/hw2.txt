@@ -1,0 +1,26 @@
+1.	a) the status of README.md is unmodified, the working directory is clean and there have been no modifications to the file
+
+b) the status of README.md is that it has been modified but it still has not been added or listed as untracked. The fun_problem.txt on the other hand is now being untracked, which means that git sees the file but it won't include it in my commit snapshots until I perform a git add for the file
+
+c) Both files are now being tracked by git and are staged. This means that if I perform git commit at this point than both these files the way they are now will be added to the historical snapshot in git.
+
+d) First off both of the files were commited to the git repository how they were when they were added. Then modifications were made to both of the files. Adding the text in paranthesis to the last line of each file. Both files are still not on the untracked or tracked list though.
+
+e) The git add command added the README file to the tracked list and is now also staged so if we were to do a git commit it would be added to the repository. The checkout command removed the modification that was made to the file in the previous step. The file is not being tracked or untracked at this time.
+
+f) The README file has been modified, but this new modification is not being tracked or staged. The file before the modification was made is still being tracked and if it were commited it would not contain the latest modification
+
+6.	In the end, I got all of the worst case run times to equal big theta of 1. I will go through each one 	
+	individually	
+
+a) bool empty() const
+		-this is big theta of 1 because all this function is doing is comparing the data member size_ to 0. If it equals 0 it returns true and if it does not it return false. There is no way the run time can be larger than 1.
+
+b) void push(const double& val)
+	-this is big theta of 1 because in a stack elements are only added and removed from the top, a function never has to add or remove from anywhere else. Therefore, the function only has to use the head pointer to add an element to the top, not requiring it to loop through the stack to add it anywhere else.
+
+c) double const& top() const
+	-this is big theta of 1 because it is only grabbing the value of the element at the top. It can use the head pointer once again to go straight to the top element and grab the value, giving it a constant run time of 1.
+
+d) void pop()
+	-similar to push, this function is big theta of 1 because it only has to remove from the top of the stack. There are no loops required to run through the stack.
