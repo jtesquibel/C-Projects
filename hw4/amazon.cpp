@@ -95,9 +95,13 @@ int main(int argc, char* argv[])
         {
           if (ss >> num)
           {
-            cout << num << endl;
-            cout << hits[num-1]->getName() << endl;
-            ds.addToCart(username, hits[num-1]);
+            int size = hits.size();
+            if (size != 0)
+            {
+              cout << num << endl;
+              cout << hits[num-1]->getName() << endl;
+              ds.addToCart(username, hits[num-1]);
+            }
           }
         }
       }

@@ -156,17 +156,20 @@ void MyDataStore::addToCart(std::string username, Product* p)
 	{
 		cout << "That user does not exist, try again" << endl;
 	}
-	if (map_.count(username) == 0)
+	else
 	{
-		std::vector<Product*> cart;
-		cart.push_back(p);
-		map_.insert(pair<std::string, std::vector<Product*> >(username, cart));
-		cout << "Added: " << map_.find(username)->second.back()->getName() << endl;
-	}
-	else 
-	{
-		map_.find(username)->second.push_back(p);
-		cout << "Added: " << map_.find(username)->second.back()->getName() << endl;
+		if (map_.count(username) == 0 )
+		{
+			std::vector<Product*> cart;
+			cart.push_back(p);
+			map_.insert(pair<std::string, std::vector<Product*> >(username, cart));
+			cout << "Added: " << map_.find(username)->second.back()->getName() << endl;
+		}
+		else if (map_.count(username) != 0) 
+		{
+			map_.find(username)->second.push_back(p);
+			cout << "Added: " << map_.find(username)->second.back()->getName() << endl;
+		}
 	}
 }
 

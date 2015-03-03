@@ -57,7 +57,6 @@ class MyDataStore : public DataStore {
  private:
   std::vector<Product*> products_;
   std::vector<User*> users_;
-  // std::map<User*, std::vector<Product*> > map_;
   std::map<std::string, std::vector<Product*> > map_;
 
 
