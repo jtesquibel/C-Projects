@@ -125,9 +125,9 @@ void MyDataStore::dump(std::ostream& ofile)
 	std::vector<Product*>::iterator it;
 	for (it = products_.begin(); it != products_.end(); ++it)
 	{
-		ofile << (*it)->displayString() << '\n';
+		(*it)->dump(ofile);
 	}
-	ofile << "<products>" << '\n';
+	ofile << "</products>" << '\n';
 
 	ofile << "<users>" << '\n';
 	std::vector<User*>::iterator itt;
@@ -136,7 +136,7 @@ void MyDataStore::dump(std::ostream& ofile)
 		ofile << (*itt)->getName() << " " << (*itt)->getAge() << " ";
 		ofile << (*itt)->getBalance() << " " << '\n';
 	}
-	ofile << "<users>" << '\n';
+	ofile << "</users>" << '\n';
 
 } 
 

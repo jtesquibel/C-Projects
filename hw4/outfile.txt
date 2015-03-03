@@ -1,16 +1,28 @@
 <products>
+book
 Data Abstraction & Problem Solving with C++
-Author: Carrano and Henry ISBN: 978-013292372-9
-79.99 20 left.
+79.99
+20
+978-013292372-9
+Carrano and Henry
+book
 Great Men and Women of Troy
-Author: Tommy Trojan ISBN: 978-000000000-1
-19.5 4 left.
+19.5
+4
+978-000000000-1
+Tommy Trojan
+clothing
 Men's Fitted Shirt
-Size: J. Crew Brand: Medium
-39.99 24 left.
+39.99
+24
+J. Crew
+Medium
+movie
 Whiplash DVD
-Genre: Drama Rating: R
-17.99 1 left.
+17.99
+1
+Drama
+R
 <products>
 <users>
 ttrojan 19 40.51 
