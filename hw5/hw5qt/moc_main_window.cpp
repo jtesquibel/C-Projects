@@ -22,7 +22,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
+      11,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -34,11 +34,13 @@ static const uint qt_meta_data_MainWindow[] = {
       29,   11,   11,   11, 0x0a,
       50,   11,   11,   11, 0x0a,
       62,   11,   11,   11, 0x0a,
-     105,   91,   79,   11, 0x0a,
-     134,   11,   11,   11, 0x0a,
-     146,   11,   11,   11, 0x0a,
-     156,   11,   11,   11, 0x0a,
-     169,   11,   11,   11, 0x0a,
+      74,   11,   11,   11, 0x0a,
+      94,   11,   11,   11, 0x0a,
+     137,  123,  111,   11, 0x0a,
+     166,   11,   11,   11, 0x0a,
+     178,   11,   11,   11, 0x0a,
+     188,   11,   11,   11, 0x0a,
+     201,   11,   11,   11, 0x0a,
 
        0        // eod
 };
@@ -46,6 +48,7 @@ static const uint qt_meta_data_MainWindow[] = {
 static const char qt_meta_stringdata_MainWindow[] = {
     "MainWindow\0\0openCartWindow()\0"
     "addSearchedProduct()\0showAdded()\0"
+    "sortAlpha()\0sortAverageRating()\0"
     "displayReviews()\0std::string\0productString\0"
     "findProductName(std::string)\0addReview()\0"
     "addCart()\0changeUser()\0saveCart()\0"
@@ -60,13 +63,15 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 0: _t->openCartWindow(); break;
         case 1: _t->addSearchedProduct(); break;
         case 2: _t->showAdded(); break;
-        case 3: _t->displayReviews(); break;
-        case 4: { std::string _r = _t->findProductName((*reinterpret_cast< std::string(*)>(_a[1])));
+        case 3: _t->sortAlpha(); break;
+        case 4: _t->sortAverageRating(); break;
+        case 5: _t->displayReviews(); break;
+        case 6: { std::string _r = _t->findProductName((*reinterpret_cast< std::string(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< std::string*>(_a[0]) = _r; }  break;
-        case 5: _t->addReview(); break;
-        case 6: _t->addCart(); break;
-        case 7: _t->changeUser(); break;
-        case 8: _t->saveCart(); break;
+        case 7: _t->addReview(); break;
+        case 8: _t->addCart(); break;
+        case 9: _t->changeUser(); break;
+        case 10: _t->saveCart(); break;
         default: ;
         }
     }
@@ -104,9 +109,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 11)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 11;
     }
     return _id;
 }

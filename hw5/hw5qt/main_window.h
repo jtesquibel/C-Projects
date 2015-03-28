@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "cart_window.h"
+#include "../msort.h"
 #include "../datastore.h"
 #include "../db_parser.h"
 
@@ -28,19 +29,24 @@ public:
 	MainWindow(std::string);
 	~MainWindow();
 
+	Product* findProduct(std::string productString);
+
 public slots:
 	void openCartWindow();
 	// void andClicked();
 	// void orClicked();
 	void addSearchedProduct();
 	void showAdded();
+	void sortAlpha();
+	void sortAverageRating();
 	void displayReviews();
 	std::string findProductName(std::string productString);
+	// Product* findProduct
 	void addReview();
-	// Product* findProduct(std::string productString);
 	void addCart();
 	void changeUser();
 	void saveCart();
+
 	
 
 private:
@@ -50,6 +56,8 @@ private:
 	MyDataStore ds_;
 
 	User* currentUser;
+
+	std::string currentSort;
 
 	// // UI
 
@@ -82,8 +90,9 @@ private:
 
 	// Result Buttons
 	QLabel* resultsLabel;
-	QPushButton* alphaSortButton;
-	QPushButton* ratingSortButton;
+	QRadioButton* alphaSortButton;
+	QRadioButton* ratingSortButton;
+	// QComboBox* sortComboBox;
 
 	// Result List
 	QListWidget* resultsListWidget;
@@ -136,7 +145,9 @@ private:
 
 	std::vector<Product*> hits_;
 
-	
+	std::vector<std::string> resultNames;
+
+
 	// List of Search Results
 	// std::vector<Product*> hits_;
 

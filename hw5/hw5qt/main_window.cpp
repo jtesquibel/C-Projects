@@ -80,11 +80,13 @@ MainWindow::MainWindow(std::string input)
 		resultLayout->addWidget(resultsLabel);
 
 		// Alpha Sort Button
-		alphaSortButton = new QPushButton("Alpha");
+		alphaSortButton = new QRadioButton("Alphabetically");
+		connect(alphaSortButton, SIGNAL(clicked()), this, SLOT(sortAlpha()));
 		resultLayout->addWidget(alphaSortButton);
 
 		// Rating Sort Button
-		ratingSortButton = new QPushButton("Average Rating");
+		ratingSortButton = new QRadioButton("By Average Rating");
+		connect(ratingSortButton, SIGNAL(clicked()), this, SLOT(sortAverageRating()));
 		resultLayout->addWidget(ratingSortButton);
 
 	// FOURTH ROW
@@ -177,6 +179,7 @@ MainWindow::MainWindow(std::string input)
 
 	// SECOND ROW
 	viewCartButton = new QPushButton("View Cart");
+	connect(viewCartButton, SIGNAL(clicked()), this, SLOT(openCartWindow()));
 	secondColumnLayout->addWidget(viewCartButton);
 
 	// THIRD ROW
@@ -205,7 +208,7 @@ MainWindow::MainWindow(std::string input)
 	// Set Overall Layout
 	setLayout(overallLayout);
 
-	connect(viewCartButton, SIGNAL(clicked()), this, SLOT(openCartWindow()));
+	// connect(viewCartButton, SIGNAL(clicked()), this, SLOT(openCartWindow()));
 	connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
 	connect(saveCartButton, SIGNAL(clicked()), this, SLOT(saveCart()));
 
@@ -221,30 +224,30 @@ MainWindow::~MainWindow()
 		++i)
 	{
 		delete *i;
-	}
+	} */
 
 	//TODO the delete UI objects
-	delete overallLayout;
-	delete pokemonDisplayLayout;
-	delete pokemonNameDisplay;
-	delete pokemonListWidget;
-	delete formLayout;
-	delete pokemonNameLabel;
-	delete pokemonNameInput;
-	delete imageFilenameLabel;
-	delete imageFilenameInput;
-	delete addButton;
-	delete pokemonImageContainer;
-	*/
+	// delete overallLayout;
+	// delete pokemonDisplayLayout;
+	// delete pokemonNameDisplay;
+	// delete pokemonListWidget;
+	// delete formLayout;
+	// delete pokemonNameLabel;
+	// delete pokemonNameInput;
+	// delete imageFilenameLabel;
+	// delete imageFilenameInput;
+	// delete addButton;
+	// delete pokemonImageContainer;
+	delete myCartWindow;
+	
 }
 
 void MainWindow::openCartWindow() 
 {
-	// std::cout << "current user = " << currentUser->getName() << std::endl;
-	std::vector<Product*> cart = ds_.getCart(currentUser->getName());
-	std::cout << "cart size" << cart.size() << std::endl;
 	std::string userName = currentUser->getName();
-	myCartWindow = new CartWindow(&cart, userName);
+	// std::cout << "current user = " << currentUser->getName() << std::endl;
+	myCartWindow = new CartWindow(ds_, userName);
+	// std::cout << "Yo" << std::endl;
 	myCartWindow->show();
 }
 
@@ -297,6 +300,14 @@ void MainWindow::addSearchedProduct()
 
 void MainWindow::showAdded() 
 {
+	if (resultsListWidget->currentItem() == 0)
+	{
+		return;
+	}
+	if (resultsListWidget->currentRow() == -1)
+	{
+		return;
+	}
 	std::string s = (resultsListWidget->currentItem())->text().toStdString();
 	std::string name = findProductName(s);
 
@@ -309,14 +320,101 @@ void MainWindow::showAdded()
 	QMessageBox::about(this, "Success!", qstr);
 }
 
+void MainWindow::sortAlpha()
+{
+	if (andSearchButton->isChecked() || orSearchButton->isChecked())
+	{
+		return;
+	}
+	// if (resultsListWidget->currentItem() == 0)
+	// {
+	// 	return;
+	// }
+	// if (resultsListWidget->currentRow() == -1)
+	// {
+	// 	return;
+	// }
+	AlphaStrComp comp1;
+	std::vector<Product*> results;
+	for (unsigned int i = 0; i < resultsListWidget->count(); i++)
+	{
+		std::string text = resultsListWidget->item(i)->text().toStdString();
+		results.push_back(findProduct(text));
+	}
+
+	mergeSort(results, comp1);
+	std::cout << "Here" << std::endl;
+
+	resultsListWidget->clear();
+	
+	for (unsigned int i = 0; i < results.size(); i++)
+	{
+		QString qstr = QString::fromStdString(results[i]->displayString());
+		resultsListWidget->addItem(qstr);
+	}
+}
+
+void MainWindow::sortAverageRating()
+{
+	if (andSearchButton->isChecked() || orSearchButton->isChecked())
+	{
+		return;
+	}
+	// if (resultsListWidget->currentItem() == 0)
+	// {
+	// 	return;
+	// }
+	// if (resultsListWidget->currentRow() == -1)
+	// {
+	// 	return;
+	// }
+	RatingComp comp;
+	std::vector<std::pair<double, Product*> > prodNames;
+	for (unsigned int i = 0; i < resultsListWidget->count(); i++)
+	{
+		std::string text = resultsListWidget->item(i)->text().toStdString();
+		// Product p = findProduct(text);
+		std::string name = findProductName(text);
+		double d = ds_.calculateAvgRating(name);
+		prodNames.push_back(std::make_pair(d, findProduct(text)));
+	}
+
+	// resultsListWidget->clear();
+	// std::vector<std::pair<Product*, double> > prodNames = ds_.getAverageprodNames();
+	for (unsigned int i = 0; i < prodNames.size(); i++)
+	{
+		cout << "Avg rating = " << prodNames[i].first << std::endl;
+		// QString qstr = QString::fromStdString(prodNames[i].second->displayString());
+		// resultsListWidget->addItem(qstr);
+	}
+	std::cout << std::endl;
+	mergeSort(prodNames, comp);
+
+
+	resultsListWidget->clear();
+
+	// std::vector<Product*> sortedRatings = ratings.first;
+	
+	for (unsigned int i = 0; i < prodNames.size(); i++)
+	{
+		cout << "Avg rating = " << prodNames[i].first << std::endl;
+		QString qstr = QString::fromStdString(prodNames[i].second->displayString());
+		resultsListWidget->addItem(qstr);
+	}
+}
+
 void MainWindow::displayReviews()
 {
 	reviewsListWidget->clear();
+
+	DateComp comp;
 
 	std::string s = (resultsListWidget->currentItem())->text().toStdString();
 	std::string name = findProductName(s);
 	
 	std::vector<Review*> reviews = ds_.getReviews(name);
+
+	mergeSort(reviews, comp);
 
 	for (unsigned int i = 0; i < reviews.size(); i++)
 	{
@@ -337,6 +435,10 @@ std::string MainWindow::findProductName(std::string productString)
 
 void MainWindow::addReview()
 {
+	if (resultsListWidget->currentItem() == 0)
+	{
+		return;
+	}
 	if (addRatingInput->text().isEmpty() || addDateInput->text().isEmpty() || addReviewInput->toPlainText().isEmpty())
 	{
 		return;
@@ -364,8 +466,7 @@ void MainWindow::addReview()
 		Review* r = new Review(prodName, rating2, date, text);
 		ds_.addReview(r);
 
-		QString qstr = QString::fromStdString(r->displayReview());
-		reviewsListWidget->addItem(qstr);
+		displayReviews();
 
 		addRatingInput->clear();
 		addDateInput->clear();
@@ -376,13 +477,21 @@ void MainWindow::addReview()
 
 void MainWindow::addCart()
 {
-	std::cout << "sdfdsf " << std::endl;
+	if (resultsListWidget->currentItem() == 0)
+	{
+		return;
+	}
+	if (resultsListWidget->currentRow() == -1)
+	{
+		return;
+	}
+	std::cout << "sdfdsf = " << resultsListWidget->currentItem() << std::endl;
 	std::string str = (resultsListWidget->currentItem())->text().toStdString();
-	std::cout << "sdfdsf " << std::endl;
+	// std::cout << "sdfdsf " << std::endl;
 	std::string prodName = findProductName(str);
-	std::cout << "sdfdsf " << std::endl;
+	// std::cout << "sdfdsf " << std::endl;
 	Product* p = ds_.getProduct(prodName);
-	std::cout << "sdfdsf " << std::endl;
+	// std::cout << "sdfdsf " << std::endl;
 
 	ds_.addToCart(currentUser->getName(), p);
 }
@@ -391,7 +500,6 @@ void MainWindow::changeUser()
 {
 	std::string user = (usersComboBox->currentText().toStdString());
 	currentUser = ds_.getUser(user);
-
 }
 
 void MainWindow::saveCart()
@@ -405,88 +513,6 @@ void MainWindow::saveCart()
 	}
 }
 
-
-// void MainWindow::andClicked()
-// {
-	// if ()
-// }
-
-// void MainWindow::orClicked()
-// {
-
-// }
-
-/*
-void MainWindow::displayProducts(int productIndex)
-{
-	// Get the pokemon specified by the index,
-	// which is passed into the function when
-	// the user clicks on pokemonListWidget
-
-	// Image
-	//TODO
-	// pokemonImageContainer = new QLabel();
-	pokemonImageContainer->setPixmap(QPixmap::fromImage(*pokemonImages[pokemonIndex]));
-	// overallLayout->addWidget(pokemonImageContainer);
-
-	// Pokemon name
-	//TODO
-	QString pokemonText;
-	pokemonText = QString::fromStdString(pokemonNames[pokemonIndex]);
-	pokemonNameDisplay->setText(pokemonText);
-} */
-
-/*
-void displayProducts(vector<Product*>& hits)
-{
-  int resultNo = 1;
-  for(vector<Product*>::iterator it = hits.begin(); it != hits.end(); ++it){
-    cout << "Hit " << setw(3) << resultNo << endl;
-    cout << (*it)->displayString() << endl;
-    cout << endl;
-    resultNo++;
-  }
-} */
-
-/*
-
-void MainWindow::addPokemon()
-{
-	// Do nothing if user left at least one input blank
-	//TODO
-	if(pokemonNameInput->text().isEmpty() || imageFilenameInput->text().isEmpty())
-	{
-		return;
-	}
-
-	// // Get form values
-	// Pokemon name
-	//TODO
-	pokemonNames.push_back(pokemonNameInput->text().toStdString());
-	// pokemonImages.push_back(pokemonFilenameInput->text().toStdString());
-	
-	// Image
-	// QString filename = imageFilenameInput->text();
-	QImage* newImage = new QImage();
-	//TODO what should go right here?
-	newImage->load(imageFilenameInput->text());
-	pokemonImages.push_back(newImage);
-
-
-
-	// Create a new list item with the pokemon's name
-	//TODO
-	pokemonListWidget->addItem(pokemonNameInput->text());
-
-	// Clear the form inputs
-	//TODO
-	pokemonNameInput->setText("");
-	imageFilenameInput->setText("");
-}
-
-*/
-
-/*
 Product* MainWindow::findProduct(std::string productString)
 {
 	std::stringstream ss;
@@ -503,13 +529,7 @@ Product* MainWindow::findProduct(std::string productString)
 			return products[i];
 		}
 	}
-} */
-
-/*
-void MainWindow::fillCart()
-{
-
-} */
+}
 
 
 

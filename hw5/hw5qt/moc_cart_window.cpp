@@ -22,7 +22,7 @@ static const uint qt_meta_data_CartWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -31,14 +31,18 @@ static const uint qt_meta_data_CartWindow[] = {
 
  // slots: signature, parameters, type, tag, flags
       12,   11,   11,   11, 0x0a,
-      54,   40,   28,   11, 0x0a,
+      28,   11,   11,   11, 0x0a,
+      72,   58,   46,   11, 0x0a,
+     100,   11,   11,   11, 0x0a,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_CartWindow[] = {
-    "CartWindow\0\0removeProduct()\0std::string\0"
+    "CartWindow\0\0removeProduct()\0"
+    "buyShoppingCart()\0std::string\0"
     "productString\0getProductName(std::string)\0"
+    "showCart()\0"
 };
 
 void CartWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -48,8 +52,10 @@ void CartWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         CartWindow *_t = static_cast<CartWindow *>(_o);
         switch (_id) {
         case 0: _t->removeProduct(); break;
-        case 1: { std::string _r = _t->getProductName((*reinterpret_cast< std::string(*)>(_a[1])));
+        case 1: _t->buyShoppingCart(); break;
+        case 2: { std::string _r = _t->getProductName((*reinterpret_cast< std::string(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< std::string*>(_a[0]) = _r; }  break;
+        case 3: _t->showCart(); break;
         default: ;
         }
     }
@@ -87,9 +93,9 @@ int CartWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 4;
     }
     return _id;
 }

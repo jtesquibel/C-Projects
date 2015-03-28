@@ -7,6 +7,7 @@
 #include "product.h"
 #include "review.h"
 #include "user.h"
+#include "util.h"
 
 /**
  * Forward declaration of Review class...You will need to include
@@ -65,22 +66,26 @@ class MyDataStore : public DataStore {
 
   void addToCart(std::string username, Product* p);
   void viewCart(std::string username);
-  void buyCart(std::string username);
+  std::vector<int> buyCart(std::string username);
 
+
+  void removeProduct(std::string username, std::string prodName);
   std::vector<Product*> getProducts();
   Product* getProduct(std::string prodName);
   std::vector<User*> getUsers();
   User* getUser(std::string userName);
   std::vector<Review*> getReviews(std::string prodName);
   std::vector<Product*> getCart(std::string username);
+  std::vector<std::pair<Product*, double> > getAverageRatings();
+  double calculateAvgRating(std::string prodName);
 
  private:
   std::vector<Product*> products_;
   std::vector<User*> users_;
   std::vector<Review*> reviews_;
+  std::vector<std::pair<Product*, double> > avgRatings_;
   std::map<std::string, std::vector<Product*> > map_;
   std::map<std::string, std::vector<Review*> > map2_;
-
 
 };
 

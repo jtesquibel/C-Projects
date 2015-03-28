@@ -45,6 +45,7 @@ void MyDataStore::addProduct(Product* p)
 	products_.push_back(p);
 	std::vector<Review*> reviews;
 	map2_.insert(pair <std::string, std::vector<Review*> >(p->getName(), reviews));
+	// avgRatings_.push_back(std::make_pair(getProduct(p->getName()), avgRating));
 }
  
   /**
@@ -53,6 +54,8 @@ void MyDataStore::addProduct(Product* p)
 void MyDataStore::addUser(User* u)
 {
 	users_.push_back(u);
+	std::vector<Product*> users;
+	map_.insert(pair <std::string, std::vector<Product*> >(u->getName(), users));
 }
 
 void MyDataStore::addReview(Review* r)
@@ -171,35 +174,7 @@ void MyDataStore::dump(std::ostream& ofile)
 
 void MyDataStore::addToCart(std::string username, Product* p)
 {
-	std::vector<User*>::iterator it;
-	bool found = false;
-	for (it = users_.begin(); it != users_.end(); ++it)
-	{
-		if ((*it)->getName() == username)
-		{
-			found = true;
-		}
-	}
-	
-	if (found == false)
-	{
-		cout << "That user does not exist, try again" << endl;
-	}
-	else
-	{
-		if (map_.count(username) == 0 )
-		{
-			std::vector<Product*> cart;
-			cart.push_back(p);
-			map_.insert(pair<std::string, std::vector<Product*> >(username, cart));
-			cout << "Added: " << map_.find(username)->second.back()->getName() << endl;
-		}
-		else if (map_.count(username) != 0) 
-		{
-			map_.find(username)->second.push_back(p);
-			cout << "Added: " << map_.find(username)->second.back()->getName() << endl;
-		}
-	}
+	map_.find(username)->second.push_back(p);
 }
 
 
@@ -222,47 +197,59 @@ void MyDataStore::viewCart(std::string username)
 	}
 } 
 
-void MyDataStore::buyCart(std::string username)
+std::vector<int> MyDataStore::buyCart(std::string username)
 {
-	std::vector<User*>::iterator it;
-	std::vector<Product*>::iterator itt;
-	bool done = false;
+	std::vector<int> rows;
 	 
-	for (it = users_.begin(); it != users_.end(); ++it)
+	for (unsigned int i = 0; i < users_.size(); i++)
 	{
-		if ((*it)->getName() == username)
+		if (users_[i]->getName() == username)
 		{
-			if (done == true)
-			{
-				break;
-			}
 			if (map_.count(username) != 0)
-			{			
-				for (itt = map_.find(username)->second.begin(); itt != map_.find(username)->second.end(); ++itt)
+			{
+				for (unsigned int j = 0; j < map_.find(username)->second.size(); j++)
 				{
-					// cout << "Cart size = " << map_.find(username)->second.size() << endl;
-						if ((*it)->getBalance() > (*itt)->getPrice() && (*itt)->getQty() > 0)
+					std::cout << "Cart size = " << map_.find(username)->second.size() << std::endl;
+					if (users_[i]->getBalance() > (map_.find(username)->second)[j]->getPrice())
+					{
+						if ((map_.find(username)->second)[j]->getQty())
 						{
-							// cout << "Previous quantity: " << (*itt)->getQty()  << "or ";
-							// cout << "Old quantity: " << (*itt)->getQty() << endl;
-							(*itt)->subtractQty(1);
-							// cout << "New quantity: " << (*itt)->getQty() << endl;
-							// cout << "Old balance: " << (*it)->getBalance() << endl;
-							(*it)->deductAmount((*itt)->getPrice());
-							cout << "Bought: " << (*itt)->getName() << endl;
-							// cout << "About to remove: " << map_.find(username)->second.at(itt) << endl;
-							
-							map_.find(username)->second.erase(itt); 
-							// cout << "New cart size = " << map_.find(username)->second.size() << endl;
-							// cout << "A1: " << map_.find(username)->second.at(i) << " A2: " << map_.find(username)->second.at(i+1) << endl;
-							cout << "New balance for " << (*it)->getName() << "s: " << (*it)->getBalance() << endl;
-							itt--;
+							(map_.find(username)->second)[j]->subtractQty(1);
+							double price = (map_.find(username)->second)[j]->getPrice();
+							users_[i]->deductAmount(price);
+							rows.push_back(j);
+							map_.find(username)->second.erase(map_.find(username)->second.begin()+j);
+							std::cout << "New balance = " << users_[i]->getBalance() << std::endl;
+							j--;
 						}
+
+					}
 				}
 			}
 		}
 	}
+	return rows;
+
 }
+
+void MyDataStore::removeProduct(std::string username, std::string prodName)
+{
+	// map_.find(username)->second.size();
+	for (unsigned int i = 0; i < map_.find(username)->second.size(); i++)
+	{
+		std::cout << "Inside" << std::endl;
+		if ((map_.find(username)->second)[i]->getName() == prodName)
+		{
+			map_.find(username)->second.erase(map_.find(username)->second.begin()+i);
+			i--;
+			std::cout << "Erased from vector" << std::endl;
+			std::cout << "Cart new size = " << map_.find(username)->second.size() << std::endl;
+			break;
+		}
+	}
+}
+
+
 
 std::vector<Product*> MyDataStore::getProducts()
 {
@@ -306,24 +293,38 @@ std::vector<Review*> MyDataStore::getReviews(std::string prodName)
 
 std::vector<Product*> MyDataStore::getCart(std::string username)
 {
-	std::vector<Product*> userCart;
-	std::vector<Product*>::iterator it;
-	if (map_.count(username) != 0)
+	std::cout << "size = " << map_.find(username)->second.size() << std::endl;
+	return map_.find(username)->second;
+}
+
+std::vector<std::pair<Product*, double> > MyDataStore::getAverageRatings()
+{
+	return avgRatings_;
+}
+
+double MyDataStore::calculateAvgRating(std::string prodName)
+{
+	double totalRating = 0;
+	int count = 0;
+	std::vector<Review*> reviews = getReviews(prodName);
+	for (unsigned int i = 0; i < reviews.size(); i++)
 	{
-		if (map_.find(username)->second.size() == 0)
-		{
-			cout << "Cart is empty" << endl;
-		}
-		// int i = 1;
-		for (it = map_.find(username)->second.begin(); it != map_.find(username)->second.end(); ++it)
-		{
-			// cout << "Item " << i << endl;
-			userCart.push_back((*it)); // cout << (*it)->displayString() << endl << endl;
-			// i++;
-		}
+		double currRating = reviews[i]->rating;
+		totalRating += currRating;
+		count++;
 	}
 
-	std::cout << "Cart size = " << userCart.size() << std::endl;
+	std::cout << "rating count = " << count << std::endl;
 
-	return userCart;
+	double avgRating;
+	if (count == 0)
+	{
+		avgRating = 0;
+	}
+	else if (count > 0)
+	{
+		avgRating = totalRating/count;
+	}
+	return avgRating;
+	// avgRatings_.push_back(std::make_pair(getProduct(prodName), avgRating));
 }
