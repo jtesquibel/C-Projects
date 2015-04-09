@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
   			PuzzleSolver ps(b, h);
 		  	ps.run();
 		  	cheat = ps.getSolution();
+		  	delete h;
 
 		  	cout << endl << "Try this sequence: ";
 		  	for (unsigned int i = 0; i < cheat.size(); i++)
@@ -49,7 +50,6 @@ int main(int argc, char *argv[])
 		  		cout << cheat[i] << " ";
 		  	}
 		  	cout << endl << "Num exmpansions = " << ps.getNumExpansions() << endl << endl;
-		  	// delete ps;
   		}
   		if (method == 1)
 	    {
@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
 		  PuzzleSolver ps(b, h);
 		  ps.run();
 		  cheat = ps.getSolution();
+		  delete h;
 
 		  cout << endl << "Try this sequence: ";
 		  for (unsigned int i = 0; i < cheat.size(); i++)
@@ -64,8 +65,6 @@ int main(int argc, char *argv[])
 		  	cout << cheat[i] << " ";
 		  }
 		  cout << endl << "Num exmpansions = " << ps.getNumExpansions() << endl << endl;
-		  // delete ps;
-	   	  // p.compute(b);
 	    }
 	    if (method == 2)
 	    {
@@ -73,6 +72,7 @@ int main(int argc, char *argv[])
 	   	  PuzzleSolver ps = PuzzleSolver(b, h);
 	   	  ps.run();
 	   	  cheat = ps.getSolution();
+	   	  delete h;
 
 	   	  cout << endl << "Try this sequence: ";
 		  for (unsigned int i = 0; i < cheat.size(); i++)
@@ -80,8 +80,6 @@ int main(int argc, char *argv[])
 		  	cout << cheat[i] << " ";
 		  }
 		  cout << endl << "Num exmpansions = " << ps.getNumExpansions() << endl << endl;
-		  // delete ps;
-	   	  // p1.compute(b);
 	    }
   		// PuzzleSolver 
   	}

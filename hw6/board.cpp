@@ -110,7 +110,7 @@ map<int, Board*> Board::potentialMoves() const
   map<int, Board*> moves_;
 
   int blankLoc;
-  for (unsigned int i = 0; i < size(); i++)
+  for (int i = 0; i < size(); i++)
   {
     if (_tiles[i] == 0)
     {
@@ -118,22 +118,13 @@ map<int, Board*> Board::potentialMoves() const
     }
   }
 
-  // cout << "Original board" << endl; 
-  // cout << this;
-
-  // for (unsigned int i = 0; i < size(); i++)
-  // {
-  //   cout << this->_tiles[i] << " ";
-  // }
-  // cout << endl;
-
   int blankRow = blankLoc/dim();
   int blankCol = blankLoc%dim();
 
   // for tile to the left
 
   int leftTile = _tiles[blankLoc-1];
-  int leftRow = blankRow;
+  // int leftRow = blankRow;
   int leftCol = blankCol-1;
 
   // making sure it doesn't go off the edge
@@ -143,20 +134,13 @@ map<int, Board*> Board::potentialMoves() const
     leftBoard->move(leftTile);
     // cout << endl << "LEFT BOARD" << endl << *leftBoard;
     moves_.insert(pair <int, Board*>(leftTile, leftBoard));
-
-    // cout << "Copied board" << endl;
-    // for (unsigned int i = 0; i < leftBoard->size(); i++)
-    // {
-    //   cout << leftBoard->_tiles[i] << " ";
-    // }
-    // cout << endl;
   }
 
   // for tile above
   
   int upTile = _tiles[blankLoc-dim()];
   int upRow = blankRow-1;
-  int upCol = blankCol;
+  // int upCol = blankCol;
 
   if (upRow >= 0)
   {
@@ -169,7 +153,7 @@ map<int, Board*> Board::potentialMoves() const
   // for tile to the right
 
   int rightTile = _tiles[blankLoc+1];
-  int rightRow = blankRow;
+  // int rightRow = blankRow;
   int rightCol = blankCol+1;
 
   if (rightCol < dim())
@@ -184,7 +168,7 @@ map<int, Board*> Board::potentialMoves() const
 
   int downTile = _tiles[blankLoc+dim()];
   int downRow = blankRow+1;
-  int downCol = blankCol;
+  // int downCol = blankCol;
 
   if (downRow < dim())
   {
@@ -200,7 +184,7 @@ map<int, Board*> Board::potentialMoves() const
 
 bool Board::solved() const
 {
-  for (unsigned int i = 0; i < size(); i++)
+  for (int i = 0; i < size(); i++)
   {
     if (_tiles[i] != i)
     {
@@ -231,12 +215,14 @@ ostream& operator<<(std::ostream &os, const Board &b)
     os << "|" << "\n";
     b.printRowBanner(os);
   }
+
+  return os;
 }
 
 bool Board::operator<(const Board& rhs) const
 {
   // cout << "In less than operator" << endl;
-  for (unsigned int i = 0; i < size(); i++)
+  for (int i = 0; i < size(); i++)
   {
     if (this->_tiles[i] < rhs._tiles[i])
     {

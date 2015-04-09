@@ -8,7 +8,7 @@ class PuzzleHeuristic
  public:
   virtual ~PuzzleHeuristic() 
   { 
-  	
+  
   }
   virtual int compute(const Board& b) = 0;
 };

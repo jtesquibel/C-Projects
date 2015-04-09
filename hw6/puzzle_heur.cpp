@@ -13,7 +13,7 @@ int PuzzleManhattanHeuristic::compute(const Board& b)
 {
 	int score = 0;
 
-	for (unsigned int i = 0; i < b.size(); i++)
+	for (int i = 0; i < b.size(); i++)
 	{
 		if (b[i] == 0)
 		{
@@ -42,7 +42,7 @@ int PuzzleOutOfPlaceHeuristic::compute(const Board& b)
 {
 	int score = 0;
 
-	for (unsigned int i = 1; i < b.size(); i++)
+	for (int i = 1; i < b.size(); i++)
 	{
 		if (b[i] != i)
 		{

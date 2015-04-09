@@ -62,10 +62,6 @@ Heap<T,Comparator>::Heap(int m, Comparator c)
 template <typename T, typename Comparator>
 Heap<T,Comparator>::~Heap()
 {
-  for (unsigned int i = 0; i < heap_.size(); i++)
-  {
-    heap_.erase(heap_.begin()+i);
-  }
   heap_.clear();
 }
 
@@ -74,10 +70,10 @@ void Heap<T,Comparator>::push(const T& item)
 {
   heap_.push_back(item);
   trickleUp(heap_.size()-1);
-  for (unsigned int i = 0; i < heap_.size(); i++)
-  {
+  // for (unsigned int i = 0; i < heap_.size(); i++)
+  // {
     // cout << heap_[i] << ", ";
-  }
+  // }
   // cout << endl;
 }
 

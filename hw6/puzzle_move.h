@@ -49,10 +49,6 @@ struct PuzzleMoveScoreComp
       {
         return true;
       }
-      else if (m1->g == m2->g)
-      {
-        return true;
-      }
       return false;
     }
     return false;

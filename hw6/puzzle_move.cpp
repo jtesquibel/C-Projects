@@ -4,13 +4,11 @@ PuzzleMove::PuzzleMove(Board* board)
 {
 	b = board;
 	g = 0;
-	prev = NULL;
 }
 
 PuzzleMove::~PuzzleMove()
 {
-	delete b;
-	// delete prev;
+
 }
 
 PuzzleMove::PuzzleMove(int tile, Board* board, PuzzleMove *parent)
